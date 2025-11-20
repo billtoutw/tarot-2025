@@ -1,13 +1,32 @@
 import { GoogleGenAI } from "@google/genai";
 import { DrawnCard, Category } from "../types";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+const getClient = () => {
+  const apiKey = process.env.API_KEY;
+  if (!apiKey) {
+    console.warn("API Key is missing");
+    return null;
+  }
+  return new GoogleGenAI({ apiKey });
+};
 
 export const getTarotReading = async (
   category: Category,
   question: string,
   cards: DrawnCard[]
 ): Promise<ReadableStream<string>> => {
+  const ai = getClient();
+  
+  if (!ai) {
+    // Mock response or error if no API key
+    return new ReadableStream({
+      start(controller) {
+        controller.enqueue("⚠️ 尚未設定 API Key。\n\n請在專案中設定 `.env` 檔案並填入 `API_KEY`，或在 GitHub Secrets 中設定。\n\n目前僅顯示模擬結果：\n\n## 🔮 模擬解讀\n星象顯示一切安好，但需要您連結真實的宇宙能量（API Key）。");
+        controller.close();
+      }
+    });
+  }
+
   const cardDescriptions = cards
     .map(
       (c, index) => {

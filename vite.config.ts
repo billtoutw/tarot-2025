@@ -9,10 +9,8 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react()],
-    // 設定為 './' 是部署到 GitHub Pages 的關鍵
-    // 這確保了資源引用使用相對路徑，而不是絕對路徑 (e.g., /assets/...)
-    // 這樣無論你的 repo 名稱是什麼，都能正確載入
-    base: './',
+    // 設定為 '/tarot-2025/' 確保 GitHub Pages 路徑正確
+    base: '/tarot-2025/',
     define: {
       // 在 build time 將 process.env.API_KEY 替換為實際的值
       // 注意：部署到公開的 GitHub Pages 會暴露此 Key
